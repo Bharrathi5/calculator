@@ -1,7 +1,6 @@
 import Button from "./Button";
 
-
-const ButtonBox = ({handleButtonClick}) => {
+const ButtonBox = ({ handleButtonClick }) => {
   const buttons = [
     { value: "AC", type: "action" },
     { value: "+/-", type: "action" },
@@ -19,17 +18,23 @@ const ButtonBox = ({handleButtonClick}) => {
     { value: "2", type: "number" },
     { value: "3", type: "number" },
     { value: "+", type: "operator" },
-    { value: "Prev", type: "action" },
+    { value: "<", type: "delete" },
     { value: "0", type: "number" },
     { value: ".", type: "number" },
-    { value: "=", type: "operator" },
+    { value: "=", type: "equal" },
   ];
   return (
     <div className="button-box">
-      {buttons.map((btn)=>(
-       <Button key={btn.value} type={btn.type} value={btn.value} onClick={handleButtonClick}/>))}
+      {buttons.map((btn) => (
+        <Button
+          key={btn.value}
+          type={btn.type}
+          value={btn.value}
+          onClick={() => handleButtonClick(btn.value, btn.type)}
+        />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default ButtonBox
+export default ButtonBox;

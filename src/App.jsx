@@ -1,16 +1,13 @@
-import Calculator from "./components/Calculator"
-
+import Calculator from "./components/Calculator";
 
 function App() {
-
   return (
     <>
-      <div>
-       <Calculator/>
+      <div className="calculator">
+        <Calculator />
       </div>
-      
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,12 +1,10 @@
-
-
-const Display = ({userInput, result}) => {
+const Display = ({ userInput, result }) => {
   return (
     <div className="display">
-      <input type="text" value={userInput}readOnly/>
-      <input type="text" value={result}readOnly/>
+      <div className="user-input">{userInput}</div>
+      <div className="result">{result}</div>
     </div>
-  )
-}
+  );
+};
 
-export default Display
+export default Display;
