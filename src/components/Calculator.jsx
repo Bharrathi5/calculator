@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ButtonBox from "./ButtonBox";
 import Display from "./Display";
 import Theme from "./Theme";
+import { evaluate } from "mathjs";
 
 const Calculator = () => {
   const [expression, setExpression] = useState([]);
@@ -23,6 +24,9 @@ const Calculator = () => {
   const handleNumber = (value) => {
     setExpression((prev) => {
       const lastItem = prev[prev.length - 1];
+      if (lastItem === 0 || lastItem === "0") {
+        return [...prev.slice(0, -1), parseFloat(value)];
+      }
       if (
         typeof lastItem === "number" ||
         (typeof lastItem === "string" && !isNaN(lastItem))
@@ -61,6 +65,7 @@ const Calculator = () => {
   };
 
   const handleEqual = () => {
+    setExpression([]);
     calculateResult();
   };
 
@@ -70,10 +75,12 @@ const Calculator = () => {
 
   const toggleSign = () => {
     setExpression((prev) => {
-      if (typeof prev[prev.length - 1] === "number") {
-        const updatedLastNumber = prev[prev.length - 1] * -1;
-        return [...prev.slice(0, -1), updatedLastNumber];
+      const lastElement = prev[prev.length - 1];
+      if (!isNaN(lastElement)) {
+        const updatedLastNumber = lastElement * -1;
+        return [...prev.slice(0, prev.length - 1), updatedLastNumber];
       }
+
       return prev;
     });
   };
@@ -92,17 +99,26 @@ const Calculator = () => {
     setExpression((exp) => exp.slice(0, -1));
   };
 
-  const calculateResult = () => {
+  const calculateResult = useCallback(() => {
     try {
       const modifiedExpression = expression
         .map((item) => (item === "x" ? "*" : item === "÷" ? "/" : item))
         .join(" ");
-      const evalResult = eval(modifiedExpression);
-      setResult(evalResult.toString());
+      const evalResult = evaluate(modifiedExpression);
+      return evalResult.toString();
     } catch {
       setResult("Error");
     }
-  };
+  }, [expression]);
+
+  useEffect(() => {
+    if (expression.length > 0) {
+      const calculated = calculateResult(expression);
+      setResult(calculated);
+    } else {
+      setResult("0");
+    }
+  }, [expression, calculateResult]);
 
   return (
     <div className={`calc ${isDark ? "dark" : "light"}`}>
