@@ -65,7 +65,6 @@ const Calculator = () => {
   };
 
   const handleEqual = () => {
-    setExpression([]);
     calculateResult();
   };
 
